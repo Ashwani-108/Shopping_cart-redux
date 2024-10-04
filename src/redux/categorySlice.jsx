@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { setLocalStorage } from "../utils/localStoageHelpers";
 
 export const CATEGORY_STATUSES = Object.freeze({
   IDLE: "idle",
@@ -11,6 +12,7 @@ const categorySlice = createSlice({
   initialState: {
     data: [], 
     status: CATEGORY_STATUSES.IDLE,
+    // sortedData: []
   },
   reducers: {
     setCategoryProducts(state, action) {
@@ -20,9 +22,35 @@ const categorySlice = createSlice({
       state.status = action.payload
     },
     sortProducts(state,action){
-     
+      const filter = action.payload
+        switch (filter) {
+          case "A-Z":
+            state.data = [...state.data].sort((a, b) => a.title.localeCompare(b.title));
+            setLocalStorage("categoryFilteredItems", [...state.data]);
+            console.log([...state.data],'state.data')
+            break;
+          case "Z-A":
+            state.data = [...state.data].sort((a, b) => b.title.localeCompare(a.title));
+            setLocalStorage("categoryFilteredItems", state.data);
+            console.log(state.data,'reverse order')
+            break;
+          case "price-low-to-high":
+            state.data = [...state.data].sort((a, b) => a.price - b.price);
+            setLocalStorage("categoryFilteredItems", state.data);
+            console.log(state.data,'price low to high')
+            break;
+          case "price-high-to-low":
+            state.data = [...state.data].sort((a, b) => b.price - a.price);
+            setLocalStorage("categoryFilteredItems", state.data);
+            break;
+          case "rating":
+            state.data = [...state.data].sort((a, b) => b.rating.rate - a.rating.rate);
+            setLocalStorage("categoryFilteredItems", state.data);
+            break;
+          default:
+            state.data
+        }  
     }
-    
   },
 });
 

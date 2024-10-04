@@ -1,49 +1,26 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchCategoryProducts } from "../redux/categorySlice";
+import { fetchCategoryProducts, sortProducts } from "../redux/categorySlice";
 import { useParams } from "react-router-dom";
-import { getLocalStorage, setLocalStorage } from "../utils/localStoageHelpers";
+import { getLocalStorage } from "../utils/localStoageHelpers";
 
 const Category = () => {
   const dispatch = useDispatch();
   const params = useParams();
-  const { data: categoryProducts, status } = useSelector((state) => state.category);
-  const [sortedProducts, setSortedProducts] = useState(categoryProducts);
-  const [selectedFilter, setSelectedFilter] = useState("");
-
-  const sortProducts = (products, filter) => {
-    switch (filter) {
-      case "A-Z":
-        console.log(filter,'newfilter')
-        return [...products].sort((a, b) => a.title.localeCompare(b.title));  // Alphabetical
-      case "Z-A":
-        return [...products].sort((a, b) => b.title.localeCompare(a.title));  // Reverse Alphabetical
-      case "price-low-to-high":
-        return [...products].sort((a, b) => a.price - b.price);  // Price Low to High
-      case "price-high-to-low":
-        return [...products].sort((a, b) => b.price - a.price);  // Price High to Low
-      case "rating":
-        return [...products].sort((a, b) => b.rating.rate - a.rating.rate);  // Sort by Rating
-      default:
-        return products;  // Return original products if no filter is selected
-    }
-  };
+  const { data: categoryProducts, status } = useSelector(
+    (state) => state.category
+  );
+  const [filteredProducts, setFilteredProducts] = useState();
 
   useEffect(() => {
-    const sorted = sortProducts(categoryProducts, selectedFilter);
-    setSortedProducts(sorted);
-    setLocalStorage("rating",sorted)
-
-    if(sorted){
-     getLocalStorage('rating') 
-     setSortedProducts(sorted);
+    const localCartItems = getLocalStorage("categoryFilteredItems");
+    if (localCartItems && localCartItems.length > 0) {
+      console.log(localCartItems, "localCartItems");
+      setFilteredProducts(localCartItems);
     }
-
-  }, [selectedFilter, categoryProducts]);
-
-  useEffect(() => {
-    dispatch(fetchCategoryProducts(params.id));
-  }, [dispatch]);
+      dispatch(fetchCategoryProducts(params.id));
+    
+  }, [dispatch])
 
   if (status === "loading") {
     return <p>Loading categories...</p>;
@@ -53,12 +30,21 @@ const Category = () => {
     return <p>Failed to load categories.</p>;
   }
 
+  const handleSort = (filter) => {
+    dispatch(sortProducts(filter)); // Dispatch sorting action
+  };
+
   return (
     <div>
       <h1>Category Items</h1>
       <div className="products_filter_wrapper">
-        <div className="products_filter">
-          <select onChange={(e) => setSelectedFilter(e.target.value)}>
+
+          <div className="side_products_filter">
+            
+          </div>
+
+          <div className="products_filter">
+          <select onChange={(e) => handleSort(e.target.value)}>
             <option value="">Sort By</option>
             <option value="A-Z">A-Z</option>
             <option value="Z-A">Z-A</option>
@@ -66,10 +52,10 @@ const Category = () => {
             <option value="price-high-to-low">Price: High to Low</option>
             <option value="rating">Rating</option>
           </select>
-        </div>
+          </div>
 
-        <div className="productsWrapper">
-          {sortedProducts?.map((item) => {
+          <div className="productsWrapper">
+          {categoryProducts?.map((item) => {
             return (
               <div className="category__product" key={item.id}>
                 <img
@@ -82,10 +68,9 @@ const Category = () => {
               </div>
             );
           })}
-        </div>
+          </div>
 
-        <div></div>
-      </div>
+        </div>
     </div>
   );
 };

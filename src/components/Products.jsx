@@ -52,7 +52,7 @@ function Products() {
   };
 
   const filteredProducts = search
-    ? products?.filter((product) =>
+    ? products?.filter((product) => 
         product.title.toLowerCase().includes(search.toLowerCase())
       )
     : products;

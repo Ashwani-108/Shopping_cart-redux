@@ -5,9 +5,7 @@ const cartSlice = createSlice({
   name: "cart",
   initialState: {
     items: getLocalStorage("cartItems", [])?.map((item) => ({...item,
-      quantity:item.quantity !== undefined && item.quantity !== null
-          ? item.quantity
-          : 1,
+      quantity:item.quantity !== undefined && item.quantity !== null? item.quantity: 1,
     })),
     totalQuantity: getLocalStorage("totalQuantity") || 0,
     totalPrice: getLocalStorage("totalPrice", 0),
@@ -94,11 +92,6 @@ const cartSlice = createSlice({
   },
 });
 
-export const {
-  add,
-  removeItem,
-  inceaseQuantity,
-  decreaseQuantity,
-  totalQuantity,
-} = cartSlice.actions;
+
+export const {add, removeItem, inceaseQuantity, decreaseQuantity, totalQuantity} = cartSlice.actions;
 export default cartSlice.reducer;
