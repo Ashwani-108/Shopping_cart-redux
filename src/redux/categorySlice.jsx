@@ -57,53 +57,53 @@ const categorySlice = createSlice({
           state.data = [...state.data];
       }
     },
-    handleRatingChange(state, action) {
-      const { checked, updatedRating } = action.payload;
-      let newrating
-      if (checked) {
-        newrating = [newrating, updatedRating]
-        const minRating = Math.min(newrating);
-        const filteredData = state.data.filter((items) => {
-          return Math.floor(items.rating.rate) >= minRating;
-        });
-        state.data = [...state.data,filteredData];
-      } 
-      else {
-        newrating = newrating.filter((r) => r !== updatedRating);
-        if (newrating.length > 0){
-          const minRating = Math.min(newrating);
-          const filteredData = state.data.filter((items) => {
-            return Math.floor(items.rating.rate) >= minRating;
-          });
-          state.data = [...state.data,filteredData];
-        } else {
-          state.data = [...state.data];
-        }
-      }
-    },
-    handlePrice(state, action) {
-      const { checked, updatedPrice } = action.payload;
-      if (checked) {
-        state.price = [...state.price, updatedPrice];
-        const minPrice = Math.min(...state.price);
-        const filteredData = state.data.filter((items) => {
-          return Math.floor(items.price) >= parseInt(minPrice);
-        });
-        state.data = [...filteredData];
-      } 
-      else {
-        state.price = state.price.filter((r) => r !== updatedPrice);
-        if (state.price.length > 0) {
-          const minPrice = Math.min(...state.price);
-          const filteredData = state.data.filter((items) => {
-            return Math.floor(items.price) >= minPrice;
-          });
-          state.data = [...filteredData];
-        } else {
-          state.data = [...state.originalData];
-        }
-      }
-    },
+    // handleRatingChange(state, action) {
+    //   const { checked, updatedRating } = action.payload;
+    //   let newrating
+    //   if (checked) {
+    //     newrating = [newrating, updatedRating]
+    //     const minRating = Math.min(newrating);
+    //     const filteredData = state.data.filter((items) => {
+    //       return Math.floor(items.rating.rate) >= minRating;
+    //     });
+    //     state.data = [...state.data,filteredData];
+    //   } 
+    //   else {
+    //     newrating = newrating.filter((r) => r !== updatedRating);
+    //     if (newrating.length > 0){
+    //       const minRating = Math.min(newrating);
+    //       const filteredData = state.data.filter((items) => {
+    //         return Math.floor(items.rating.rate) >= minRating;
+    //       });
+    //       state.data = [...state.data,filteredData];
+    //     } else {
+    //       state.data = [...state.data];
+    //     }
+    //   }
+    // },
+    // handlePrice(state, action) {
+    //   const { checked, updatedPrice } = action.payload;
+    //   if (checked) {
+    //     state.price = [...state.price, updatedPrice];
+    //     const minPrice = Math.min(...state.price);
+    //     const filteredData = state.data.filter((items) => {
+    //       return Math.floor(items.price) >= parseInt(minPrice);
+    //     });
+    //     state.data = [...filteredData];
+    //   } 
+    //   else {
+    //     state.price = state.price.filter((r) => r !== updatedPrice);
+    //     if (state.price.length > 0) {
+    //       const minPrice = Math.min(...state.price);
+    //       const filteredData = state.data.filter((items) => {
+    //         return Math.floor(items.price) >= minPrice;
+    //       });
+    //       state.data = [...filteredData];
+    //     } else {
+    //       state.data = [...state.originalData];
+    //     }
+    //   }
+    // },
   },
 });
 
