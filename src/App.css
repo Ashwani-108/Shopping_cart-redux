@@ -1,5 +1,5 @@
 #root {
-  max-width: 1280px;
+  max-width: 1500px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
@@ -11,6 +11,8 @@
   will-change: filter;
   transition: filter 300ms;
 }
+
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
@@ -35,6 +37,11 @@
 
 .card {
   padding: 2em;
+}
+
+.card img{
+  max-width: 100px;
+  margin: auto;
 }
 
 .read-the-docs {
@@ -89,8 +96,6 @@
 
 .cartWrapper .totalCartItems{
   background-color: #FFF;
-  display: flex;
-  justify-content: center;
   padding: 10px 0;
   border-radius: 4px;
 }
@@ -157,4 +162,45 @@
   background-color: #FFF;
   padding: 10px;
   border-radius: 4px;
+}
+
+/**products_filter_wrapper*/
+
+.products_filter_wrapper{
+  position: relative;
+}
+
+.container{
+  max-width: 1400px;
+}
+
+.product_filters{
+  background-color: #FFF;
+}
+
+.products_filter_block{
+  display: flex;
+  justify-content: space-between;
+  grid-gap: 10px;
+}
+
+.productsWrapper{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+
+.product_filters{
+  min-width: 200px; 
+  padding: 0 0 20px 20px;
+}
+
+.product_filters .price-filters,
+.product_filters .rating-change,.product_filters  .brand-change{
+  text-align: left;
+}
+
+.cartCard img{
+  max-width: 60px;
 }

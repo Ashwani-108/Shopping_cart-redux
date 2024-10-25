@@ -1,10 +1,14 @@
 import { useDispatch, useSelector } from "react-redux";
-import { decreaseQuantity, inceaseQuantity, removeItem } from "../redux/cartSlice";
+import {
+  decreaseQuantity,
+  inceaseQuantity,
+  removeItem,
+} from "../redux/cartSlice";
+import CartComponent from "../components/CartComponent";
 
 const Cart = () => {
-
-  const totalCartItems = useSelector(state => state.cart.totalQuantity)
-  const totalPrice = useSelector(state => state.cart.totalPrice)
+  const totalCartItems = useSelector((state) => state.cart.totalQuantity);
+  const totalPrice = useSelector((state) => state.cart.totalPrice);
   const products = useSelector((state) => state.cart.items);
   const dispatch = useDispatch();
 
@@ -17,37 +21,29 @@ const Cart = () => {
     console.log(itemid, "itemid");
   };
 
-  const decreaseItemsQuantity = (itemid) =>{
+  const decreaseItemsQuantity = (itemid) => {
     dispatch(decreaseQuantity(itemid));
     console.log(itemid, "itemid");
-  }
+  };
 
   return (
     <div className="cartWrapper">
       <div className="cart-container">
         {products?.map((product) => {
           return (
-            <div className="cartCard" key={product.id}>
-              <img src={product.image} alt="" />
-              <h5>{product.title}</h5>
-              <div style={{ display: "inline-flex", alignItems: "center", gap: "5px"}}>
-                <button className="btn btn-sm" onClick={() => increaseItemsQuantity(product)}>+</button>
-                <h6>{product.quantity}</h6>
-                <button className="btn btn-sm" onClick={() => decreaseItemsQuantity(product)}>-</button>
-              </div>
-              <h5>${product.price*product.quantity}</h5>
-              <button className="btn" onClick={() => handleRemove(product)}>
-                Remove
-              </button>
-            </div>
+            <CartComponent
+              increaseItemsQuantity={increaseItemsQuantity}
+              key={product}
+              decreaseItemsQuantity={decreaseItemsQuantity}
+              handleRemove={handleRemove}
+              product={product}
+            />
           );
         })}
       </div>
-      <div className="totalCartItems">
-      {totalCartItems === 0 ? 'cart is empty':totalCartItems}
-      <h4>
-        {totalPrice}
-      </h4>
+      <div className="totalCartItems px-2">
+        <p>Total cart items {totalCartItems === 0 ? "0" : totalCartItems}</p>
+        <h6>Final price {Math.floor(totalPrice)}</h6>
       </div>
     </div>
   );

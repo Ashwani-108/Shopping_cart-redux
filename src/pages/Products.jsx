@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { add } from "../redux/cartSlice";
 import { STATUSES, fetchProducts } from "../redux/productSlice";
 import { getLocalStorage, setLocalStorage } from "../utils/localStoageHelpers";
 import { useNavigate } from "react-router-dom";
+import ProductComponent from "../components/ProductComponent";
 
 function Products() {
   const cart = useSelector((state) => state.cart.items);
@@ -12,6 +13,7 @@ function Products() {
   const [category, setCategories] = useState([]);
   const { data: products, status } = useSelector((state) => state.product);
   const [search, setSearch] = useState("");
+  
   const fetchNewProducts = async () => {
     dispatch(fetchProducts());
   };
@@ -36,7 +38,9 @@ function Products() {
   }, [dispatch]);
 
   const fetchCategories = () => {
-    const uniqueCategories = [...new Set(products?.flatMap((product) => product.category))];
+    const uniqueCategories = [
+      ...new Set(products?.flatMap((product) => product.category)),
+    ];
     setCategories(uniqueCategories);
   };
 
@@ -48,13 +52,11 @@ function Products() {
 
   const handleCategory = (categoryName) => {
     console.log(categoryName, "categoryName");
-    window.open(`/category/${categoryName}`,'_blank');
+    window.open(`/category/${categoryName}`, "_blank");
   };
 
-  const filteredProducts = search
-    ? products?.filter((product) => 
-        product.title.toLowerCase().includes(search.toLowerCase())
-      )
+  const filteredProducts = search ? products?.filter(
+    (product) =>product.title.toLowerCase().includes(search.toLowerCase()))
     : products;
 
   return (
@@ -80,10 +82,7 @@ function Products() {
               return (
                 <>
                   <li className="category__container_listItem">
-                    <button
-                      className="btn btn-category"
-                      onClick={() => handleCategory(menuitem)}
-                    >
+                    <button className="btn btn-category btn-secondary mt-3 btn-sm"onClick={() => handleCategory(menuitem)}>
                       {menuitem}
                     </button>
                   </li>
@@ -98,21 +97,13 @@ function Products() {
           filteredProducts.map((product) => {
             const isInCart = cart?.some((item) => item.id === product.id);
             return (
-              <div className="card" key={product.id}>
-                <img src={product.image} alt={product.title} />
-                <h4>{product.title}</h4>
-                <h5>${product.price}</h5>
-                <button
-                  className={`btn ${
-                    isInCart ? "btn-go-to-cart" : "btn-add-to-cart"
-                  }`}
-                  onClick={() =>
-                    isInCart ? handleGoToCart() : handleAdd(product)
-                  }
-                >
-                  {isInCart ? "Go to Cart" : "Add to Cart"}
-                </button>
-              </div>
+              <ProductComponent
+                key={product}
+                product={product}
+                handleGoToCart={handleGoToCart}
+                handleAdd={handleAdd}
+                isInCart={isInCart}
+              />
             );
           })
         ) : (

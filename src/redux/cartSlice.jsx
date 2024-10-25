@@ -55,16 +55,18 @@ const cartSlice = createSlice({
 
       if (existingItem && existingItem.quantity > 0) {
         existingItem.quantity -= 1;
-        if (existingItem.quantity === 0) {
-          state.items = state.items.filter(
-            (item) => item.id !== action.payload.id
-          );
-        }
         state.totalQuantity -= 1;
         state.totalPrice = state.items.reduce(
           (total, item) => total + item.price * item.quantity,
           0
         );
+
+        if (existingItem.quantity === 0) {
+          state.items = state.items.filter(
+            (item) => item.id !== action.payload.id
+          );
+        }
+        
         setLocalStorage("cartItems", state.items);
         setLocalStorage("totalQuantity", state.totalQuantity);
         setLocalStorage("totalPrice", state.totalPrice);
@@ -84,6 +86,7 @@ const cartSlice = createSlice({
           (total, item) => total + item.price * item.quantity,
           0
         );
+
         setLocalStorage("cartItems", state.items);
         setLocalStorage("totalQuantity", state.totalQuantity);
         setLocalStorage("totalPrice", state.totalPrice);
