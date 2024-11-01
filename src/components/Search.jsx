@@ -1,8 +1,7 @@
-import React from 'react'
 
 const Search = ({searchProduct,search}) => {
   return (
-    <div className = 'search__Wrapper'>
+    <div className = 'search__Wrapper text-center'>
         <input type = 'search' 
             value = {search}
             onChange = {() => searchProduct(e.target.value)}

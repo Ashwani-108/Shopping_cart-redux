@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { CATEGORY_STATUSES, fetchCategoryProducts, handlePrice, handleRatingChange, sortProducts } from "../redux/categorySlice";
+import { CATEGORY_STATUSES, fetchCategoryProducts,setPricing,setRatings,sortProducts,selectFilteredProductList } from "../redux/categorySlice";
 import { useParams } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 
@@ -10,78 +10,34 @@ const Category = () => {
   const [productPrice] = useState(['50','100','200','300','500'])
   const dispatch = useDispatch();
   const params = useParams();
-  const { data: categoryProducts, status } = useSelector((state) => state.category);
+  const categoryProducts = useSelector(selectFilteredProductList);
+  const status = useSelector((state) => state.category.status);  
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const [originalData, setOriginalData] = useState();
-  const [activeFilters, setActiveFilters] = useState({  
-    ratings: [],  
-    price: [],  
-    brands: []  
-  });
-
 
   const handleRating = (e) => {
-    const filterValue = e.target.value;  
-    const filterType = 'ratings';  
-    const isChecked = e.target.checked;  
-    handleFilterChange(filterType, filterValue, isChecked);  
+    const filterValue = e.target.value;    
+    dispatch(setRatings(filterValue))
   }
 
   const handlePriceChange = (e) =>{
-    const filterValue = e.target.value;  
-    const filterType = 'price';  
-    const isChecked = e.target.checked;  
-    handleFilterChange(filterType, filterValue, isChecked);  
+    const filterpricing = e.target.value; 
+    dispatch(setPricing(filterpricing))
   }
-
-  const handleFilterChange = (filterType, filterValue, isChecked) => {  
-    const newActiveFilters = {...activeFilters};  
-    if (isChecked) {  
-      if (!newActiveFilters[filterType]) {  
-        newActiveFilters[filterType] = [];  
-       }  
-       newActiveFilters[filterType].push(filterValue);  
-    } 
-    else {  
-     newActiveFilters[filterType] = newActiveFilters[filterType]?.filter((value) => value !== filterValue);  
-    }
-
-    setActiveFilters(newActiveFilters);  
-
-    const filteredData = originalData.filter((item) => {  
-     if (filterType === 'price') {  
-      const priceFilterValues = newActiveFilters.price;  
-      const itemPrice = item.price;  
-      return priceFilterValues.some((priceFilterValue) => itemPrice >= priceFilterValue);  
-     }  
-     else if (filterType === 'ratings') {  
-      const ratingFilterValues = newActiveFilters.ratings;
-      console.log(ratingFilterValues,'ratingFilterValues')  
-      const itemRating = item.rating.rate;  
-      return ratingFilterValues.some(rating => itemRating >= rating);
-     }  
-    });  
-    setFilteredProducts(filteredData);  
-    console.log(filteredData,'filteredProducts')
-
-    if(activeFilters.length <=0){
-      setFilteredProducts(categoryProducts);  
-    }
-
-  };
+    
 
   useEffect(() => {
     dispatch(fetchCategoryProducts(params.id));
   }, [dispatch,params.id]);
 
+
   useEffect(()=>{
     const deepCopy = JSON.parse(JSON.stringify(categoryProducts));
     setFilteredProducts(deepCopy);
-    setOriginalData(categoryProducts)
   },[categoryProducts])
     
+
   const handleSort = (filter) => {
-    dispatch(sortProducts(filter)); // Dispatch sorting action
+    dispatch(sortProducts(filter)); 
   };
 
   return (
@@ -116,8 +72,8 @@ const Category = () => {
                       id={price}
                       onChange={(e) => handlePriceChange(e)}
                     />
-                  <label htmlFor={price}>{price} & above</label>
-                </div>
+                    <label htmlFor={price}>{price} & above</label>
+                  </div>
                 ))}
               </div>
               <div className="rating-change">

@@ -4,7 +4,7 @@ import {
   inceaseQuantity,
   removeItem,
 } from "../redux/cartSlice";
-import CartComponent from "../components/CartComponent";
+import CartComponent from "../components/cart/CartComponent";
 
 const Cart = () => {
   const totalCartItems = useSelector((state) => state.cart.totalQuantity);

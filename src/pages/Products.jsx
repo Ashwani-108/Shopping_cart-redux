@@ -69,7 +69,7 @@ function Products() {
       <div className="category__wrapper">
         <div className="category__container">
           {products && (
-            <div className="search__Wrapper">
+            <div className="search__Wrapper text-center">
               <input
                 type="search"
                 onChange={(e) => setSearch(e.target.value)}
@@ -82,7 +82,10 @@ function Products() {
               return (
                 <>
                   <li className="category__container_listItem">
-                    <button className="btn btn-category btn-secondary mt-3 btn-sm"onClick={() => handleCategory(menuitem)}>
+                    <button 
+                      className="btn btn-category btn-secondary mt-3 btn-sm" 
+                      onClick={() => handleCategory(menuitem)}
+                    >
                       {menuitem}
                     </button>
                   </li>
